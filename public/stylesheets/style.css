@@ -1,0 +1,19 @@
+body {
+    background: #d4daea;
+}
+
+.thumbnail {
+    width: 300px;
+}
+.thumbnail img {
+    max-height: 200px;
+    height: 300px;
+}
+
+.description {
+    color: #686464;
+}
+.price {
+    font-weight: bold;
+    font-size: 16px;
+}
