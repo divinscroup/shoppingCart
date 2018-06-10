@@ -8,21 +8,30 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Video Game Store <i class="fas fa-gamepad"></i></a>
+      <a class="navbar-brand" href="/">Video Game Store <i class="fas fa-gamepad"></i></a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><i class="fas fa-shopping-cart"></i> Shopping Cart</a></li>
+        <li><a href="#">
+          <i class="fas fa-shopping-cart"></i> CheckOut
+          <span class="badge">{{ arrCart }}</span>
+          </a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-tie"></i> User Account<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Account</a></li>
-            <li><a href="#">Another action</a></li>
+            {{#if login}}
+              <li><a href="/users/profile">Account</a></li>
+             <li role="separator" class="divider"></li>
+             <li><a href="/users/logout"><i class="fas fa-sign-out-alt"></i> Log out</a></li>
+            {{else}}
+            <li><a href="/users/signup">Sign Up</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="#"><i class="fas fa-sign-out-alt"></i> Log out</a></li>
+            <li><a href="/users/signin">Sign in</a></li> 
+            {{/if}}
+            
           </ul>
         </li>
       </ul>
