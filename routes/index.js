@@ -3,7 +3,6 @@ var router = express.Router();
 var product = require('../routes/product');
 var mongoose = require('mongoose')
 mongoose.connect('mongodb://localhost:27017/shopping');
-var assert = require('assert');
 var csrf = require('csurf');
 var objectId = require('mongodb').ObjectID;
 var passport  = require('passport');
@@ -11,7 +10,6 @@ var cookieParser = require('cookie-parser');
 var csrfProtection = csrf({cookie: true});
 var bodyParser = require('body-parser');
 var parseForm = bodyParser.urlencoded({ extended: false });
-
 var Schema = mongoose.Schema;
 var userDataSchema = new Schema({
   imgPath:{type: String, required: true},
@@ -22,7 +20,9 @@ var userDataSchema = new Schema({
 var UserData = mongoose.model('UserData', userDataSchema);
 
 var cartSchema = new Schema({
-  id_cart: String
+  id_cart: String,
+  title: String,
+  price: Number
 },{collection:'cartData'});
 var cartData = mongoose.model('cartData', cartSchema);
 
@@ -79,16 +79,54 @@ router.post('/users/signin', parseForm, csrfProtection,passport.authenticate('lo
 }));
 
 router.get('/add-to-cart/:_id', function(req,res,next){
-var productId = {id_cart:req.params._id};
-var data = new cartData(productId);
-  data.save();
-    
-    console.log(productId);
-    res.redirect('/');
-  });
-  
 
-  
+var cTitle, cPrice;
+
+UserData.findById({'_id':req.params._id})
+      .then(function(doc) {
+        cTitle = doc.title;
+        cPrice = doc.price
+        console.log(cTitle);
+        var productData = {id_cart:req.params._id,
+          title: cTitle,
+          price: cPrice
+        };
+        var data = new cartData(productData);
+        data.save();
+        res.redirect('/');
+        });
+            
+});
+        
+
+
+var total;
+router.get('/checkout', function(req,res,next){
+  total = 0;
+  cartData.find()
+      .then(function(doc) {
+        doc.forEach(function(d){
+          total += d.price ;
+        });
+        
+        res.render('checkout', {items: doc, total: total});
+            
+        });
+        });
+      
+router.get('/delete-cart/:_id', function(req,res,next){
+  var id = req.params._id;
+  cartData.findByIdAndRemove(id).exec();
+  console.log(id);
+  res.redirect('/checkout');
+});
+
+router.get('/payment/', function(req,res,next){
+  res.render('payment',{total:total});
+});
+
+
+
 module.exports = router;
 
 function isLoggedIn(req,res,next){

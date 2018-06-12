@@ -1,0 +1,27 @@
+<div class="container" style="margin-top:100px">
+{{#each items}}
+    
+
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3 ">
+            <ul class="list-group ">
+                <li class="list-group-item clearfix">
+                    <strong>{{this.title }}</strong>
+                    <span class="label label-success">${{ this.price}}</span>
+                    <a href="/delete-cart/{{this.id}}" class="btn btn-primary pull-right" role="button">Remove</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+{{/each}}
+<div class="row">
+    <div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">
+        <strong>Total: ${{total}}</strong>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">
+        <a href="/payment" type="button" class="btn btn-success">Checkout</a>
+    </div>
+</div>
+</div>
